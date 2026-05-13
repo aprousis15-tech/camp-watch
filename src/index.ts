@@ -1,6 +1,7 @@
 import { RESERVECALIFORNIA_PARKS, RECREATIONGOV_PARKS } from "./parks.ts";
 import { checkReserveCalifornia } from "./sources/reservecalifornia.ts";
 import { checkRecreationGov } from "./sources/recreationgov.ts";
+import { checkHipcamp } from "./sources/hipcamp.ts";
 import { loadState, saveState, filterNew, pruneOld } from "./state.ts";
 import { notify } from "./notify.ts";
 import type { Opening } from "./types.ts";
@@ -28,6 +29,12 @@ async function runAll(): Promise<CheckResult[]> {
         .catch((e: Error) => ({ label: `RG: ${park.name}`, openings: [], error: e.message })),
     );
   }
+
+  tasks.push(
+    checkHipcamp()
+      .then((openings) => ({ label: "HC: bbox ~2.5h SF", openings }))
+      .catch((e: Error) => ({ label: "HC: bbox ~2.5h SF", openings: [], error: e.message })),
+  );
 
   return Promise.all(tasks);
 }

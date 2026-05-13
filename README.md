@@ -12,7 +12,7 @@ Want a phone push too? Install the GitHub mobile app and enable push notificatio
 
 - **Recreation.gov** — public `/api/camps/availability/campground/{id}/month` endpoint. Verified working.
 - **ReserveCalifornia** — UseDirect `search/grid` POST endpoint. Park IDs auto-resolved by name on first run via `search/place`.
-- **Hipcamp** — disabled. Their search is fully client-rendered with no static API surface; reliable scraping would need Playwright, which is overkill for free-tier Actions. Browse manually at [hipcamp.com](https://www.hipcamp.com).
+- **Hipcamp** — headless Chromium via Playwright (their site is client-rendered, no public API). Scrapes the search-result DOM. Slower (~10s/run) and more fragile than the API sources, but works.
 
 ## Files
 
