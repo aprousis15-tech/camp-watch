@@ -1,6 +1,958 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><title>camp-watch · loading</title></head>
-<body style="font-family:sans-serif;padding:48px;max-width:700px;margin:auto;">
-<h1>camp-watch</h1>
-<p>The first scan hasn't run yet. Refresh in ~5 min — the GitHub Actions cron will populate this page on its next run.</p>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>camp-watch · MDW + weekend after</title>
+  <meta name="robots" content="noindex" />
+  <style>
+  :root {
+    --paper: #F7F4EE;
+    --paper-deep: #EFEBE2;
+    --ink: #1C1A17;
+    --ink-soft: #4A463F;
+    --ink-mute: #8A857B;
+    --rule: #D9D4C8;
+    --moss: #4F5B30;
+    --rust: #9C5239;
+    --gold: #B08842;
+    --trip-a: #4F5B30;
+    --trip-b: #4A6A7A;
+    --pass-bg: #EFF3E5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 15px; line-height: 1.55; }
+  .page { max-width: 1200px; margin: 0 auto; padding: 48px 24px 80px; }
+  header { border-bottom: 1px solid var(--rule); padding-bottom: 24px; margin-bottom: 36px; }
+  h1 { font-family: ui-serif, Georgia, serif; font-weight: 500; font-size: clamp(32px, 4vw, 48px); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 12px; }
+  header p { color: var(--ink-soft); }
+  .stamp { font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-mute); margin-top: 12px; }
+  section { margin-bottom: 56px; }
+  h2 { font-family: ui-serif, Georgia, serif; font-weight: 500; font-size: 28px; letter-spacing: -0.01em; margin-bottom: 6px; }
+  .trip-a h2 { color: var(--trip-a); }
+  .trip-b h2 { color: var(--trip-b); }
+  h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-mute); margin: 22px 0 10px; }
+  .meta { color: var(--ink-soft); font-size: 13px; margin-bottom: 10px; }
+  table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--rule); margin-bottom: 12px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--rule); font-size: 13.5px; vertical-align: top; }
+  th { background: var(--paper-deep); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.title a { color: var(--ink); text-decoration: none; font-weight: 600; }
+  td.title a:hover { color: var(--rust); text-decoration: underline; }
+  tr.pass { background: var(--pass-bg); }
+  tr.pass td.title a { color: var(--moss); }
+  .badge { display: inline-block; padding: 2px 8px; background: var(--gold); color: white; border-radius: 2px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+  .empty { text-align: center; color: var(--ink-mute); padding: 20px; font-style: italic; }
+  .dim { color: var(--ink-mute); }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; padding: 8px 12px; background: var(--paper-deep); border-radius: 2px; font-size: 13px; color: var(--ink-soft); margin-bottom: 8px; user-select: none; }
+  summary:hover { color: var(--ink); }
+  .tier-top { color: var(--gold); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; }
+  .tier-gold { color: var(--moss); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; }
+  .tier-standard { color: var(--ink-mute); text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--rule); color: var(--ink-mute); font-size: 12px; }
+  .score { color: var(--moss); font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>camp-watch</h1>
+      <p>Hipcamp openings within ~2.5h of SF for Memorial Day weekend and the weekend after. Scanning every 5 min; rows highlighted in green pass the quality bar (≥95% rating, ≥50 reviews).</p>
+      <p class="stamp">Last update: 2026-05-13 23:12 UTC · 44 qualifying / 84 bookable across both trips</p>
+    </header>
+
+    
+    <section class="trip trip-a">
+      <h2>Trip A — MDW</h2>
+      <p class="meta">2026-05-22 → 2026-05-25 · 3 nights · 17 qualifying · 42 total bookable</p>
+
+      <h3>Passes the bar (≥95% / 50+ reviews)</h3>
+      <table>
+        <thead>
+          <tr><th>Listing</th><th>Location</th><th>Rating</th><th>Reviews</th><th>Host</th><th>Price</th><th>Score</th></tr>
+        </thead>
+        <tbody><tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-walnut-valley-realm-campground-ex9h8qok?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">100%(882)Walnut Valley Realm Campground9 sites · Tents, RVs, LodgingLogansport, IN · 2 hr 33 minfrom$30 / night·$107 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">882</td>
+    <td></td>
+    <td>$30 </td>
+    <td class="num score">295.0</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/wisconsin-purplehaze-acres-49mxhm29?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">98%(966)Purplehaze Acres3 sites · Tents, LodgingRubicon, WI · 2 hr 33 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">966</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">293.0</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-blooming-bus-farms-5x5h7m1x?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">98%(423)Blooming Bus Farms4 sites · Tents, Lodging, RVsNiles, MI · 1 hr 38 minfrom$148 / night·$550 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">423</td>
+    <td></td>
+    <td>$148 </td>
+    <td class="num score">258.4</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-heritage-farm-stay-adventure-4kk9h7zx?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">99%(392)Heritage Farm Stay Adventure3 sites · Tents, Lodging, RVsFlora, IN · 2 hr 37 minfrom$40 / night·$150 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">392</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">257.8</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-east-woods-on-the-il-river-g1xmhr82?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">97%(335)East Woods on the IL River1 site · Tents, RVsOttawa, IL · 1 hr 20 minfrom$60 / night·$213 total</a></td>
+    <td></td>
+    <td class="num">97%</td>
+    <td class="num">335</td>
+    <td></td>
+    <td>$60 </td>
+    <td class="num score">246.2</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/wisconsin-circle-m-farm-stay-camp-or-glamp-3pw1hod7?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">100%(209)Circle M Farm Stay: Camp or Glamp3 sites · Tents, RVs, LodgingBlanchardville, WI · 2 hr 47 minfrom$115 / night·$426 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">209</td>
+    <td></td>
+    <td>$115 </td>
+    <td class="num score">234.0</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-river-camp-fort-wayne-qeoho5kp?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">New98%(220)River Camp Fort Wayne6 sites · Lodging, Tents, RVsFort Wayne, IN · 3 hr 1 minfrom$33 / night·$117 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">220</td>
+    <td></td>
+    <td>$33 </td>
+    <td class="num score">231.4</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-angel-creek-9mxhlw8m?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">98%(151)Angel Creek17 sites · TentsSheridan, IL · 1 hr 15 minfrom$43 / night·$151 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">151</td>
+    <td></td>
+    <td>$43 </td>
+    <td class="num score">216.3</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-the-once-a-pond-a-time-campsites-xryhmw5n?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">97%(154)The Once a Pond A Time Campsites18 sites · Tents, RVsBridgman, MI · 1 hr 25 minfrom$61 / night·$233 total</a></td>
+    <td></td>
+    <td class="num">97%</td>
+    <td class="num">154</td>
+    <td></td>
+    <td>$61 </td>
+    <td class="num score">214.8</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-lochloosa-river-retreat-ozxh5ln1?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">98%(139)Lochloosa River Retreat7 sites · Lodging, Tents, RVsCulver, IN · 2 hr 5 minfrom$48 / night·$170 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">139</td>
+    <td></td>
+    <td>$48 </td>
+    <td class="num score">213.0</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-sleek-acres-1xmhppyz?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">100%(117)Sleek Acres5 sites · Tents, RVsGrovertown, IN · 1 hr 29 minfrom$38 / night·$148 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">117</td>
+    <td></td>
+    <td>$38 </td>
+    <td class="num score">210.4</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/wisconsin-terra-growers-organic-farm-1xmh0l9l?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">95%(145)Terra Growers Organic Farm20 sites · Tents, RVsWaunakee, WI · 2 hr 32 minfrom$49 / night·$174 total</a></td>
+    <td></td>
+    <td class="num">95%</td>
+    <td class="num">145</td>
+    <td></td>
+    <td>$49 </td>
+    <td class="num score">208.1</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-campit-outdoor-resort-2ejh61wr?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">99%(100)Campit Outdoor Resort40 sites · Tents, LodgingFennville, MI · 2 hr 5 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">100</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">202.1</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-posey-ridge-lz9h6z92?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">96%(106)Posey Ridge3 sites · Tents, RVs, LodgingDanvers, IL · 2 hr 26 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">106</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">198.2</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-the-old-rugged-barn-4nelh8qe?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">96%(89)The Old Rugged Barn16 sites · Tents, RVsTowanda, IL · 1 hr 59 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">89</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">191.6</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-oak-meadows-xryhmov5?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">96%(80)Oak Meadows3 sites · Tents, RVsLakewood Club, MI · 3 hrfrom$30 / night·$112 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">80</td>
+    <td></td>
+    <td>$30 </td>
+    <td class="num score">187.6</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-restful-camping-retreat-6p0hq096?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">99%(62)Restful Camping Retreat9 sites · Tents, RVs, LodgingMarcellus, MI · 2 hr 21 minfrom$28 / night·$98 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">62</td>
+    <td></td>
+    <td>$28 </td>
+    <td class="num score">183.9</td>
+  </tr></tbody>
+      </table>
+
+      <details>
+        <summary>25 other bookable listings (didn't meet quality bar)</summary>
+        <table>
+          <thead>
+            <tr><th>Listing</th><th>Location</th><th>Rating</th><th>Reviews</th><th>Host</th><th>Price</th><th>Score</th></tr>
+          </thead>
+          <tbody><tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/wisconsin-cedar-hills-campground-dw9hdw9y?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">94%(320)Cedar Hills Campground40 sites · Tents, RVsMazomanie, WI · 2 hr 58 minfrom$45 / night·$160 total</a></td>
+    <td></td>
+    <td class="num">94%</td>
+    <td class="num">320</td>
+    <td></td>
+    <td>$45 </td>
+    <td class="num score">236.7</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-the-vaudeville-urban-farm-fun-gv1qh5wl?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">92%(316)The Vaudeville Urban Farm Fun!8 sites · Tents, RVsChicago, IL · 16 minfrom$68 / night·$241 total</a></td>
+    <td></td>
+    <td class="num">92%</td>
+    <td class="num">316</td>
+    <td></td>
+    <td>$68 </td>
+    <td class="num score">231.2</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-have-a-lake-of-your-own-zwjhrppl?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">92%(138)Have A Lake Of Your Own!10 sites · Lodging, TentsLawrence, MI · 1 hr 57 minfrom$75 / night·$265 total</a></td>
+    <td></td>
+    <td class="num">92%</td>
+    <td class="num">138</td>
+    <td></td>
+    <td>$75 </td>
+    <td class="num score">199.7</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-bear-bottom-ranch-mxvhlpyn?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">92%(131)Bear Bottom Ranch1 site · Tents, RVs, LodgingYorkville, IL · 1 hr 16 minfrom$30 / night·$107 total</a></td>
+    <td></td>
+    <td class="num">92%</td>
+    <td class="num">131</td>
+    <td></td>
+    <td>$30 </td>
+    <td class="num score">197.7</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-kayak-starved-rock-campground-xryh8r8q?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">87%(171)Kayak Starved Rock Campground16 sites · Tents, RVsOttawa, IL · 1 hr 31 minfrom$39$35 / night·$123 total</a></td>
+    <td></td>
+    <td class="num">87%</td>
+    <td class="num">171</td>
+    <td></td>
+    <td>$39 </td>
+    <td class="num score">196.4</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-daisy-s-farms-on-notalotta-acers-dw9hldor?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">99%(46)Daisy’s Farms On Notalotta Acers4 sites · Tents, RVsBig Rock, IL · 1 hr 6 minfrom$30 / night·$107 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">46</td>
+    <td></td>
+    <td>$30 </td>
+    <td class="num score">173.1</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-tincan-camp-1xmh0011?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">100%(39)Tincan Camp1 site · Lodging, RVsBloomingdale, MI · 2 hr 15 minfrom$208 / night·$826 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">39</td>
+    <td></td>
+    <td>$208 </td>
+    <td class="num score">169.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-sand-lily-farms-nelhwpep?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">97%(44)Sand Lily Farms3 sites · Tents, RVsPullman, MI · 2 hr 14 minfrom$35 / night·$124 total</a></td>
+    <td></td>
+    <td class="num">97%</td>
+    <td class="num">44</td>
+    <td></td>
+    <td>$35 </td>
+    <td class="num score">168.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-geneseo-campground-lz9hvkln?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">96%(38)Geneseo Campground5 sites · RVs, Lodging, TentsGeneseo, IL · 2 hr 26 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">38</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">161.4</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-whispering-pines-events-lodging-r57h26mj?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">98%(30)Whispering Pines Events &amp; Lodging31 sites · Lodging, Tents, RVsGeneseo, IL · 2 hr 28 minfrom$28 / night·$98 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">30</td>
+    <td></td>
+    <td>$28 </td>
+    <td class="num score">157.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-the-city-farm-rv-stop-dw9hk0xk?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">98%(23)The City Farm - RV Stop1 site · RVsBloomington, IL · 2 hr 12 minfrom$45 / night·$160 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">23</td>
+    <td></td>
+    <td>$45 </td>
+    <td class="num score">148.8</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-rocking-horse-camping-ranch-ozxhrdld?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">96%(24)Rocking Horse Camping Ranch1 site · LodgingGary, IN · 42 minfrom$119 / night·$490 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">24</td>
+    <td></td>
+    <td>$119 </td>
+    <td class="num score">147.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-flipside-acres-j29hzlwo?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">98%(20)Flipside Acres5 sites · RVs, TentsSpring Lake, MI · 2 hr 49 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">20</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">144.8</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-a-waggin-good-time-at-mellow-acres-dw9he9zn?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">92%(24)A Waggin' Good Time At Mellow Acres14 sites · Tents, RVsFennville, MI · 2 hr 11 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">92%</td>
+    <td class="num">24</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">140.9</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-black-river-trails-campground-kk9hk16d?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">93%(20)Black River Trails Campground26 sites · Tents, RVs, LodgingSouth Haven, MI · 1 hr 59 minfrom$62 / night·$229 total</a></td>
+    <td></td>
+    <td class="num">93%</td>
+    <td class="num">20</td>
+    <td></td>
+    <td>$62 </td>
+    <td class="num score">137.4</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-harbor-country-cabins-47rvhy12?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">100%(13)Harbor Country Cabins1 site · LodgingSawyer, MI · 1 hr 20 minfrom$925 / night·$3401 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">13</td>
+    <td></td>
+    <td>$925 </td>
+    <td class="num score">136.2</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-barrington-camp-close-to-town-6p0h0yy9?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">94%(18)Barrington Camp Close to Town4 sites · RVsBarrington, IL · 53 minfrom$85 / night·$302 total</a></td>
+    <td></td>
+    <td class="num">94%</td>
+    <td class="num">18</td>
+    <td></td>
+    <td>$85 </td>
+    <td class="num score">136.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-endless-adventure-kk9hz0dp?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">94%(18)Endless Adventure5 sites · Tents, RVs, LodgingCedar Springs, MI · 3 hr 6 minfrom$50 / night·$177 total</a></td>
+    <td></td>
+    <td class="num">94%</td>
+    <td class="num">18</td>
+    <td></td>
+    <td>$50 </td>
+    <td class="num score">136.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-cozy-country-camping-1-06yhzp78?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">New96%(12)Cozy Country Camping1 site · Tents, RVsValparaiso, IN · 1 hr 7 minfrom$28 / night·$97 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">12</td>
+    <td></td>
+    <td>$28 </td>
+    <td class="num score">128.9</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-dome-haven-campground-v1qh227r?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">95%(10)Dome Haven Campground3 sites · LodgingSouth Haven, MI · 1 hr 55 minfrom$391 / night·$1453 total</a></td>
+    <td></td>
+    <td class="num">95%</td>
+    <td class="num">10</td>
+    <td></td>
+    <td>$391 </td>
+    <td class="num score">123.6</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-crooked-creek-ranch-4-j29hmdwy?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">100%(7)Crooked Creek Ranch1 site · Tents, RVsAshton, IL · 1 hr 39 minfrom$33 / night·$117 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">7</td>
+    <td></td>
+    <td>$33 </td>
+    <td class="num score">123.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-foley-s-4x4-timber-trail-camping-1-qeohvy57?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">100%(7)Foley's 4x4 Timber Trail Camping25 sites · TentsMount Carroll, IL · 2 hr 40 minfrom$24 / night·$82 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">7</td>
+    <td></td>
+    <td>$24 </td>
+    <td class="num score">123.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-the-pug-ranch-9mxhyljr?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">94%(8)The Pug Ranch1 site · LodgingLudington, MI · 3 hr 50 minfrom$175 / night·$615 total</a></td>
+    <td></td>
+    <td class="num">94%</td>
+    <td class="num">8</td>
+    <td></td>
+    <td>$175 </td>
+    <td class="num score">118.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-trailerwood-pw1hvype?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Booked 1 timeTrailerwood3 sites · RVsWhite Cloud, MI · 3 hr 27 minfrom$30 / night·$107 total</a></td>
+    <td></td>
+    <td class="num"><span class='dim'>—</span></td>
+    <td class="num"><span class='dim'>—</span></td>
+    <td></td>
+    <td>$30 </td>
+    <td class="num score">0.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-tall-sycamore-campground-j29hm9ez?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Booked 4 timesTall Sycamore Campground20 sites · Tents, RVsLogansport, IN · 2 hr 31 minfrom$51 / night·$189 total</a></td>
+    <td></td>
+    <td class="num"><span class='dim'>—</span></td>
+    <td class="num"><span class='dim'>—</span></td>
+    <td></td>
+    <td>$51 </td>
+    <td class="num score">0.0</td>
+  </tr></tbody>
+        </table>
+      </details>
+    </section>
+  
+
+    <section class="trip trip-b">
+      <h2>Trip B — Weekend after MDW</h2>
+      <p class="meta">2026-05-29 → 2026-06-01 · 3 nights · 27 qualifying · 42 total bookable</p>
+
+      <h3>Passes the bar (≥95% / 50+ reviews)</h3>
+      <table>
+        <thead>
+          <tr><th>Listing</th><th>Location</th><th>Rating</th><th>Reviews</th><th>Host</th><th>Price</th><th>Score</th></tr>
+        </thead>
+        <tbody><tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-walnut-valley-realm-campground-ex9h8qok?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">100%(882)Walnut Valley Realm Campground11 sites · Tents, RVs, LodgingLogansport, IN · 2 hr 33 minfrom$30$28 / night·$98 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">882</td>
+    <td></td>
+    <td>$30 </td>
+    <td class="num score">295.0</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/wisconsin-purplehaze-acres-49mxhm29?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">98%(966)Purplehaze Acres8 sites · Tents, LodgingRubicon, WI · 2 hr 33 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">966</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">293.0</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-horseshoe-bend-1-gv1qhm50?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">99%(682)Horseshoe Bend10 sites · Tents, RVsRoanoke, IL · 2 hr 14 minfrom$25 / night·$89 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">682</td>
+    <td></td>
+    <td>$25 </td>
+    <td class="num score">281.2</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-linden-camprground-kk9h89yw?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">96%(734)Linden Camprground5 sites · Tents, RVs, LodgingApple River, IL · 2 hr 43 minfrom$35$33 / night·$116 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">734</td>
+    <td></td>
+    <td>$35 </td>
+    <td class="num score">275.7</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-blooming-bus-farms-5x5h7m1x?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">98%(423)Blooming Bus Farms6 sites · Tents, Lodging, RVsNiles, MI · 1 hr 38 minfrom$34 / night·$120 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">423</td>
+    <td></td>
+    <td>$34 </td>
+    <td class="num score">258.4</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-heritage-farm-stay-adventure-4kk9h7zx?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">99%(392)Heritage Farm Stay Adventure5 sites · Tents, Lodging, RVsFlora, IN · 2 hr 37 minfrom$39 / night·$145 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">392</td>
+    <td></td>
+    <td>$39 </td>
+    <td class="num score">257.8</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/wisconsin-cricket-ranch-zwjh8wzp?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">99%(346)Cricket Ranch4 sites · TentsCascade, WI · 2 hr 30 minfrom$50$47 / night·$165 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">346</td>
+    <td></td>
+    <td>$50 </td>
+    <td class="num score">252.6</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-escape-to-nature-wz6h6me6?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">98%(362)Escape to Nature4 sites · Tents, RVsHuntley, IL · 1 hr 1 minfrom$31 / night·$97 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">362</td>
+    <td></td>
+    <td>$31 </td>
+    <td class="num score">251.9</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-life-adventures-dw9h2pdq?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">97%(350)Life Adventures2 sites · Lodging, Tents, RVsSaranac, MI · 3 hr 15 minfrom$25 / night·$89 total</a></td>
+    <td></td>
+    <td class="num">97%</td>
+    <td class="num">350</td>
+    <td></td>
+    <td>$25 </td>
+    <td class="num score">248.0</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-east-woods-on-the-il-river-g1xmhr82?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">97%(335)East Woods on the IL River1 site · Tents, RVsOttawa, IL · 1 hr 20 minfrom$58 / night·$206 total</a></td>
+    <td></td>
+    <td class="num">97%</td>
+    <td class="num">335</td>
+    <td></td>
+    <td>$58 </td>
+    <td class="num score">246.2</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-2chicks-and-a-farm-1xmh8prq?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">99%(247)2Chicks And A Farm4 sites · Lodging, Tents, RVsBangor, MI · 2 hr 5 minfrom$65 / night·$230 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">247</td>
+    <td></td>
+    <td>$65 </td>
+    <td class="num score">238.6</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-welcome-to-our-magical-woods-g6p0hd62?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">98%(249)Welcome to our Magical Woods4 sites · TentsMarseilles, IL · 1 hr 17 minfrom$35 / night·$124 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">249</td>
+    <td></td>
+    <td>$35 </td>
+    <td class="num score">236.5</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-willowthorne-9mxhzwdw?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">97%(263)Willowthorne1 site · RVs, TentsLynwood, IL · 33 minfrom$58 / night·$206 total</a></td>
+    <td></td>
+    <td class="num">97%</td>
+    <td class="num">263</td>
+    <td></td>
+    <td>$58 </td>
+    <td class="num score">236.3</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/wisconsin-circle-m-farm-stay-camp-or-glamp-3pw1hod7?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">100%(209)Circle M Farm Stay: Camp or Glamp4 sites · Tents, RVs, LodgingBlanchardville, WI · 2 hr 47 minfrom$114 / night·$419 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">209</td>
+    <td></td>
+    <td>$114 </td>
+    <td class="num score">234.0</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-river-camp-fort-wayne-qeoho5kp?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">New98%(220)River Camp Fort Wayne7 sites · Lodging, Tents, RVsFort Wayne, IN · 3 hr 1 minfrom$33 / night·$117 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">220</td>
+    <td></td>
+    <td>$33 </td>
+    <td class="num score">231.4</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-sheepy-acres-88lh0zl5?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">99%(197)Sheepy Acres4 sites · Tents, LodgingLagrange, IN · 2 hr 21 minfrom$35 / night·$124 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">197</td>
+    <td></td>
+    <td>$35 </td>
+    <td class="num score">229.3</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-yurt-glamping-tents-farm-animals-wz6h5d52?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">99%(175)Yurt Glamping Tents + Farm Animals5 sites · LodgingTiskilwa, IL · 2 hr 6 minfrom$117$98 / night·$372 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">175</td>
+    <td></td>
+    <td>$117 </td>
+    <td class="num score">224.5</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-dalton-traders-tents-rv-s-cabins-wz6hk779?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">99%(154)Dalton Traders  Tents  RV's  Cabins1 site · Tents, RVs, LodgingTwin Lake, MI · 3 hr 2 minfrom$45 / night·$160 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">154</td>
+    <td></td>
+    <td>$45 </td>
+    <td class="num score">219.3</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/iowa-1860-s-botanical-homestead-y0zhwrly?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">97%(168)1860's Botanical Homestead1 site · Tents, LodgingBellevue, IA · 3 hr 15 minfrom$50 / night·$188 total</a></td>
+    <td></td>
+    <td class="num">97%</td>
+    <td class="num">168</td>
+    <td></td>
+    <td>$50 </td>
+    <td class="num score">218.3</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-the-once-a-pond-a-time-campsites-xryhmw5n?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">97%(154)The Once a Pond A Time Campsites19 sites · Tents, RVsBridgman, MI · 1 hr 25 minfrom$54 / night·$204 total</a></td>
+    <td></td>
+    <td class="num">97%</td>
+    <td class="num">154</td>
+    <td></td>
+    <td>$54 </td>
+    <td class="num score">214.8</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/wisconsin-terra-growers-organic-farm-1xmh0l9l?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">95%(145)Terra Growers Organic Farm20 sites · Tents, RVsWaunakee, WI · 2 hr 32 minfrom$49 / night·$174 total</a></td>
+    <td></td>
+    <td class="num">95%</td>
+    <td class="num">145</td>
+    <td></td>
+    <td>$49 </td>
+    <td class="num score">208.1</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-campit-outdoor-resort-2ejh61wr?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">99%(100)Campit Outdoor Resort40 sites · Tents, LodgingFennville, MI · 2 hr 5 minfrom$40$38 / night·$132 total</a></td>
+    <td></td>
+    <td class="num">99%</td>
+    <td class="num">100</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">202.1</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-posey-ridge-lz9h6z92?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">96%(106)Posey Ridge4 sites · Tents, RVs, LodgingDanvers, IL · 2 hr 26 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">106</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">198.2</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-riverside-respite-at-new-richmond-v1qhdy1d?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">96%(100)Riverside Respite at New Richmond1 site · Tents, LodgingFennville, MI · 2 hr 19 minfrom$60 / night·$223 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">100</td>
+    <td></td>
+    <td>$60 </td>
+    <td class="num score">196.0</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-camp-ames-nelhl96y?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">100%(70)Camp Ames3 sites · RVsPeru, IN · 2 hr 36 minfrom$50 / night·$178 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">70</td>
+    <td></td>
+    <td>$50 </td>
+    <td class="num score">190.3</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-oak-meadows-xryhmov5?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">96%(80)Oak Meadows4 sites · Tents, RVsLakewood Club, MI · 3 hrfrom$24 / night·$87 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">80</td>
+    <td></td>
+    <td>$24 </td>
+    <td class="num score">187.6</td>
+  </tr>
+<tr class="row pass">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-uncle-bob-s-backwoods-j29hzn5o?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">100%(52)♥ Uncle Bob's Backwoods1 site · RVs, TentsNoblesville, IN · 3 hrfrom$90 / night·$321 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">52</td>
+    <td></td>
+    <td>$90 </td>
+    <td class="num score">179.2</td>
+  </tr></tbody>
+      </table>
+
+      <details>
+        <summary>15 other bookable listings (didn't meet quality bar)</summary>
+        <table>
+          <thead>
+            <tr><th>Listing</th><th>Location</th><th>Rating</th><th>Reviews</th><th>Host</th><th>Price</th><th>Score</th></tr>
+          </thead>
+          <tbody><tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/wisconsin-cedar-hills-campground-dw9hdw9y?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">94%(320)Cedar Hills Campground40 sites · Tents, RVsMazomanie, WI · 2 hr 58 minfrom$45 / night·$160 total</a></td>
+    <td></td>
+    <td class="num">94%</td>
+    <td class="num">320</td>
+    <td></td>
+    <td>$45 </td>
+    <td class="num score">236.7</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-the-vaudeville-urban-farm-fun-gv1qh5wl?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">92%(316)The Vaudeville Urban Farm Fun!8 sites · Tents, RVsChicago, IL · 16 minfrom$68 / night·$241 total</a></td>
+    <td></td>
+    <td class="num">92%</td>
+    <td class="num">316</td>
+    <td></td>
+    <td>$68 </td>
+    <td class="num score">231.2</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-bear-bottom-ranch-mxvhlpyn?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">92%(131)Bear Bottom Ranch4 sites · Tents, RVs, LodgingYorkville, IL · 1 hr 16 minfrom$30 / night·$107 total</a></td>
+    <td></td>
+    <td class="num">92%</td>
+    <td class="num">131</td>
+    <td></td>
+    <td>$30 </td>
+    <td class="num score">197.7</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-tincan-camp-1xmh0011?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">100%(39)Tincan Camp3 sites · Lodging, RVsBloomingdale, MI · 2 hr 15 minfrom$63 / night·$235 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">39</td>
+    <td></td>
+    <td>$63 </td>
+    <td class="num score">169.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-geneseo-campground-lz9hvkln?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">96%(38)Geneseo Campground5 sites · RVs, Lodging, TentsGeneseo, IL · 2 hr 26 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">38</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">161.4</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-whispering-pines-events-lodging-r57h26mj?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">98%(30)Whispering Pines Events &amp; Lodging31 sites · Lodging, Tents, RVsGeneseo, IL · 2 hr 28 minfrom$25 / night·$89 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">30</td>
+    <td></td>
+    <td>$25 </td>
+    <td class="num score">157.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-rocking-horse-camping-ranch-ozxhrdld?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">96%(24)Rocking Horse Camping Ranch1 site · LodgingGary, IN · 42 minfrom$119 / night·$488 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">24</td>
+    <td></td>
+    <td>$119 </td>
+    <td class="num score">147.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-flipside-acres-j29hzlwo?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">98%(20)Flipside Acres5 sites · RVs, TentsSpring Lake, MI · 2 hr 49 minfrom$40 / night·$142 total</a></td>
+    <td></td>
+    <td class="num">98%</td>
+    <td class="num">20</td>
+    <td></td>
+    <td>$40 </td>
+    <td class="num score">144.8</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-black-river-trails-campground-kk9hk16d?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">93%(20)Black River Trails Campground29 sites · Tents, RVs, LodgingSouth Haven, MI · 1 hr 59 minfrom$59 / night·$217 total</a></td>
+    <td></td>
+    <td class="num">93%</td>
+    <td class="num">20</td>
+    <td></td>
+    <td>$59 </td>
+    <td class="num score">137.4</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-harbor-country-cabins-47rvhy12?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">100%(13)Harbor Country Cabins1 site · LodgingSawyer, MI · 1 hr 20 minfrom$892 / night·$3274 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">13</td>
+    <td></td>
+    <td>$892 </td>
+    <td class="num score">136.2</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/illinois-barrington-camp-close-to-town-6p0h0yy9?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">94%(18)Barrington Camp Close to Town4 sites · RVsBarrington, IL · 53 minfrom$85 / night·$302 total</a></td>
+    <td></td>
+    <td class="num">94%</td>
+    <td class="num">18</td>
+    <td></td>
+    <td>$85 </td>
+    <td class="num score">136.0</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-the-man-s-annex-aka-the-mannex-pw1hr1ld?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">100%(12)The Man's Annex AKA the MANNEX!1 site · Tents, RVsBeverly Shores, IN · 58 minfrom$175$166 / night·$581 total</a></td>
+    <td></td>
+    <td class="num">100%</td>
+    <td class="num">12</td>
+    <td></td>
+    <td>$175 </td>
+    <td class="num score">134.2</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-cozy-country-camping-1-06yhzp78?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">New96%(12)Cozy Country Camping2 sites · Tents, RVsValparaiso, IN · 1 hr 7 minfrom$20 / night·$71 total</a></td>
+    <td></td>
+    <td class="num">96%</td>
+    <td class="num">12</td>
+    <td></td>
+    <td>$20 </td>
+    <td class="num score">128.9</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/michigan-dome-haven-campground-v1qh227r?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">95%(10)Dome Haven Campground3 sites · LodgingSouth Haven, MI · 1 hr 55 minfrom$355$320 / night·$1203 total</a></td>
+    <td></td>
+    <td class="num">95%</td>
+    <td class="num">10</td>
+    <td></td>
+    <td>$355 </td>
+    <td class="num score">123.6</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/indiana-bison-gazing-at-white-oaks-bison-qeohqj28?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Bison Gazing at White Oaks Bison4 sites · RVsRochester, IN · 2 hr 18 minfrom$60 / night·$214 total</a></td>
+    <td></td>
+    <td class="num"><span class='dim'>—</span></td>
+    <td class="num"><span class='dim'>—</span></td>
+    <td></td>
+    <td>$60 </td>
+    <td class="num score">0.0</td>
+  </tr></tbody>
+        </table>
+      </details>
+    </section>
+  
+
+    
+    <section class="reference">
+      <h2>Profile reference — the 11 from the brief</h2>
+      <p class="meta">These are the sites that define the "good" profile. The scanner above looks for listings of similar or better quality.</p>
+      <table>
+        <thead><tr><th>Rank</th><th>Listing</th><th>Location</th><th>Tier</th><th>Trip</th></tr></thead>
+        <tbody><tr>
+      <td>#1</td>
+      <td>Timber Cove</td>
+      <td>Jenner, Sonoma Coast</td>
+      <td><span class="tier-top">top</span></td>
+      <td>Trip A</td>
+    </tr>
+<tr>
+      <td>#2</td>
+      <td>Camp Nauvoo</td>
+      <td>Placerville, El Dorado</td>
+      <td><span class="tier-top">top</span></td>
+      <td>Trip A</td>
+    </tr>
+<tr>
+      <td>#3</td>
+      <td>Mendocino Magic — Cannonball</td>
+      <td>Laytonville, Mendocino</td>
+      <td><span class="tier-gold">gold</span></td>
+      <td>Trip A</td>
+    </tr>
+<tr>
+      <td>#4</td>
+      <td>Stemple Creek Ranch</td>
+      <td>Tomales, Marin</td>
+      <td><span class="tier-gold">gold</span></td>
+      <td>Trip A</td>
+    </tr>
+<tr>
+      <td>#5</td>
+      <td>Quail Ridge Farm</td>
+      <td>Los Gatos</td>
+      <td><span class="tier-gold">gold</span></td>
+      <td>Trip A</td>
+    </tr>
+<tr>
+      <td>#6</td>
+      <td>Sun/Moon Rise Camp w/ Valley View</td>
+      <td>Aptos, Day Valley</td>
+      <td><span class="tier-standard">standard</span></td>
+      <td>Trip A</td>
+    </tr>
+<tr>
+      <td>#7</td>
+      <td>Comptche Matrix @ Sunny-land</td>
+      <td>Comptche, Mendocino</td>
+      <td><span class="tier-standard">standard</span></td>
+      <td>Trip A</td>
+    </tr>
+<tr>
+      <td>#8</td>
+      <td>Red Dragonfly Ranch</td>
+      <td>Groveland, Yosemite gateway</td>
+      <td><span class="tier-standard">standard</span></td>
+      <td>Trip A</td>
+    </tr>
+<tr>
+      <td>#1</td>
+      <td>A California Dream: Camp Hoppy</td>
+      <td>Cazadero, Sonoma</td>
+      <td><span class="tier-top">top</span></td>
+      <td>Trip B</td>
+    </tr>
+<tr>
+      <td>#2</td>
+      <td>Banks Ranch in the Redwoods</td>
+      <td>Bonny Doon, Santa Cruz</td>
+      <td><span class="tier-gold">gold</span></td>
+      <td>Trip B</td>
+    </tr>
+<tr>
+      <td>#3</td>
+      <td>Finley Camp</td>
+      <td>Bodega, Sonoma</td>
+      <td><span class="tier-standard">standard</span></td>
+      <td>Trip B</td>
+    </tr></tbody>
+      </table>
+    </section>
+  
+
+    <footer>
+      Source: <a href="https://github.com/aprousis15-tech/camp-watch">github.com/aprousis15-tech/camp-watch</a> · runs every 5 min via GitHub Actions · alerts open as GitHub issues
+    </footer>
+  </div>
+</body>
+</html>
