@@ -2,24 +2,31 @@ import { fetch } from "undici";
 import { DRY_RUN } from "./config.ts";
 import type { Opening } from "./types.ts";
 
-function escapeMd(s: string): string {
+function escapeMd(s: string | null | undefined): string {
+  if (!s) return "";
   return s.replace(/([\\`*_{}[\]()#+\-.!|])/g, "\\$1");
 }
 
-function tripHeader(tripId: "A" | "B", tripLabel: string, items: Opening[]): string {
-  const dateRange = items[0] ? `${items[0].checkIn} → ${items[0].checkOut}` : "";
-  const lines = [
-    `### Trip ${tripId} — ${escapeMd(tripLabel)} (${dateRange})`,
+function renderRating(o: Opening): string {
+  if (o.rating == null) return "—";
+  if (o.ratingBasis === "stars") return `★ ${o.rating.toFixed(2)}`;
+  return `${o.rating}%`;
+}
+
+function renderRow(o: Opening): string {
+  const host = o.starHost ? "⭐ Star Host" : "";
+  return `| ${escapeMd(o.listingName)} | ${escapeMd(o.locationText)} | ${renderRating(o)} | ${o.reviews ?? "—"} | ${host} | ${escapeMd(o.priceText)} | [Reserve](${o.url}) |`;
+}
+
+function tripBlock(tripId: "A" | "B", items: Opening[]): string {
+  const dateRange = `${items[0].checkIn} → ${items[0].checkOut}`;
+  return [
+    `### Trip ${tripId} — ${escapeMd(items[0].tripLabel)} (${dateRange})`,
     "",
-    "| Rank | Tier | Listing | Link |",
-    "|---|---|---|---|",
-  ];
-  for (const o of items) {
-    lines.push(
-      `| #${o.rank} | ${o.tier} | ${escapeMd(o.listingName)} | [Reserve](${o.url}) |`,
-    );
-  }
-  return lines.join("\n");
+    "| Listing | Location | Rating | Reviews | Host | Price | Book |",
+    "|---|---|---|---|---|---|---|",
+    ...items.map(renderRow),
+  ].join("\n");
 }
 
 function renderBody(openings: Opening[]): string {
@@ -28,29 +35,24 @@ function renderBody(openings: Opening[]): string {
     if (!byTrip.has(o.tripId)) byTrip.set(o.tripId, []);
     byTrip.get(o.tripId)!.push(o);
   }
-  const sections: string[] = [
-    `**${openings.length} new opening${openings.length === 1 ? "" : "s"}** — book fast, these vanish.`,
+  const parts: string[] = [
+    `**${openings.length} new qualifying opening${openings.length === 1 ? "" : "s"}** matching the profile (≥95% rating, ≥50 reviews).`,
+    "",
+    "Live dashboard: [aprousis15-tech.github.io/camp-watch](https://aprousis15-tech.github.io/camp-watch/)",
     "",
   ];
   for (const [tripId, items] of byTrip) {
-    sections.push(tripHeader(tripId, items[0].tripLabel, items));
-    sections.push("");
+    parts.push(tripBlock(tripId, items));
+    parts.push("");
   }
-  sections.push("_camp-watch · ranking is from the MDW two-trips brief._");
-  return sections.join("\n");
+  parts.push("_camp-watch · book fast, MDW spots vanish in minutes._");
+  return parts.join("\n");
 }
 
 function renderTitle(openings: Opening[]): string {
-  // Lead with the best-ranked opening so the email subject is informative.
-  const top = openings.reduce((best, o) => {
-    if (!best) return o;
-    if (o.tripId < best.tripId) return o;
-    if (o.tripId === best.tripId && o.rank < best.rank) return o;
-    return best;
-  }, null as Opening | null)!;
-  const others = openings.length - 1;
-  const suffix = others > 0 ? ` (+${others} more)` : "";
-  return `[camp-watch] #${top.rank} ${top.listingName} open for Trip ${top.tripId}${suffix}`;
+  const top = openings.reduce((best, o) => (!best || o.score > best.score ? o : best), null as Opening | null)!;
+  const suffix = openings.length > 1 ? ` (+${openings.length - 1} more)` : "";
+  return `[camp-watch] ${top.listingName} open for Trip ${top.tripId}${suffix}`;
 }
 
 export async function notify(openings: Opening[]): Promise<void> {

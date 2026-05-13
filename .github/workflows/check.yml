@@ -2,14 +2,14 @@ name: camp-watch
 
 on:
   schedule:
-    # Every 5 minutes. GitHub may queue/delay free-tier cron under load —
-    # in practice expect runs every 5–15 minutes.
     - cron: "*/5 * * * *"
   workflow_dispatch: {}
 
 permissions:
   contents: write
   issues: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: camp-watch
@@ -19,6 +19,8 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 12
+    outputs:
+      docs_changed: ${{ steps.commit.outputs.docs_changed }}
     steps:
       - uses: actions/checkout@v4
 
@@ -50,14 +52,33 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: npm run check
 
-      - name: Commit state + slug changes
+      - name: Commit state + docs
+        id: commit
         run: |
-          if [[ -n "$(git status --porcelain state.json slugs.json)" ]]; then
-            git config user.name "camp-watch[bot]"
-            git config user.email "camp-watch@users.noreply.github.com"
-            git add state.json slugs.json
-            git commit -m "state: update notified set / resolved slugs"
-            git push
+          git config user.name "camp-watch[bot]"
+          git config user.email "camp-watch@users.noreply.github.com"
+          git add state.json docs/
+          if git diff --cached --quiet; then
+            echo "No changes."
+            echo "docs_changed=false" >> $GITHUB_OUTPUT
           else
-            echo "No state changes."
+            git commit -m "state + docs: refresh"
+            git push
+            echo "docs_changed=true" >> $GITHUB_OUTPUT
           fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

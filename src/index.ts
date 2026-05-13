@@ -1,4 +1,5 @@
-import { checkAllHipcamp } from "./sources/hipcamp.ts";
+import { scanAllTrips, toOpenings } from "./sources/hipcampScan.ts";
+import { buildSite } from "./site/build.ts";
 import { loadState, saveState, filterNew, pruneOld } from "./state.ts";
 import { notify } from "./notify.ts";
 
@@ -6,20 +7,23 @@ async function main(): Promise<void> {
   const startedAt = Date.now();
   console.log(`camp-watch run @ ${new Date().toISOString()}`);
 
-  const openings = await checkAllHipcamp();
+  const results = await scanAllTrips();
+  const allOpenings = toOpenings(results);
 
-  // Sort by trip then rank so the email reads top-down by preference.
-  openings.sort((a, b) => {
+  // Build the dashboard regardless of new findings.
+  await buildSite(results);
+  console.log(`Built docs/index.html (${results.reduce((n, r) => n + r.candidates.length, 0)} cards rendered)`);
+
+  // Dedupe-aware notifier: only emails on first observation.
+  allOpenings.sort((a, b) => {
     if (a.tripId !== b.tripId) return a.tripId === "A" ? -1 : 1;
-    return a.rank - b.rank;
+    return b.score - a.score;
   });
-
-  console.log(`Total bookable now: ${openings.length}`);
 
   const state = await loadState();
   pruneOld(state);
-  const fresh = filterNew(state, openings);
-  console.log(`New since last run: ${fresh.length}`);
+  const fresh = filterNew(state, allOpenings);
+  console.log(`Qualifying: ${allOpenings.length} · new this run: ${fresh.length}`);
 
   if (fresh.length > 0) {
     await notify(fresh);

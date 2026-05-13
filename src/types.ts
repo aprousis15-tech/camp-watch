@@ -1,17 +1,38 @@
-import type { Tier } from "./listings.ts";
+export type RatingBasis = "stars" | "pct";
+
+// A search-result card with parsed metadata. Used by both the notifier
+// (only `qualifies: true` ones become Openings) and the site generator
+// (shows everything, sorted by score).
+export type Candidate = {
+  slug: string;
+  title: string;
+  locationText: string | null;
+  priceText: string | null;
+  ratingValue: number | null;
+  ratingBasis: RatingBasis | null;
+  reviews: number | null;
+  starHost: boolean;
+  imageUrl: string | null;
+  url: string;
+  score: number;
+  qualifies: boolean;
+};
 
 export type Opening = {
-  // Identifier (e.g. trip + listing name).
   tripId: "A" | "B";
   tripLabel: string;
-  rank: number;
-  tier: Tier;
   listingName: string;
+  slug: string;
   checkIn: string;
   checkOut: string;
   nights: number;
-  // Direct booking URL with arrive/depart preselected.
   url: string;
-  // Stable key for dedupe.
+  rating: number | null;
+  ratingBasis: RatingBasis | null;
+  reviews: number | null;
+  starHost: boolean;
+  priceText: string | null;
+  locationText: string | null;
+  score: number;
   dedupeKey: string;
 };
