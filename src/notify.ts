@@ -1,36 +1,62 @@
 import { fetch } from "undici";
-import { TRIP, DRY_RUN } from "./config.ts";
+import { DRY_RUN } from "./config.ts";
 import type { Opening } from "./types.ts";
-
-// We notify by opening a GitHub issue in the same repo. GitHub will email
-// the repo owner (per your notification settings — default is "watching" on
-// owned repos, which emails on every new issue). No API keys required —
-// uses the GITHUB_TOKEN already provided to GitHub Actions.
 
 function escapeMd(s: string): string {
   return s.replace(/([\\`*_{}[\]()#+\-.!|])/g, "\\$1");
 }
 
-function renderBody(openings: Opening[]): string {
+function tripHeader(tripId: "A" | "B", tripLabel: string, items: Opening[]): string {
+  const dateRange = items[0] ? `${items[0].checkIn} → ${items[0].checkOut}` : "";
   const lines = [
-    `**${openings.length} new opening${openings.length === 1 ? "" : "s"}** for ${TRIP.checkIn} → ${TRIP.checkOut} (${TRIP.nights} nights, tent, up to ${TRIP.maxPeople} people)`,
+    `### Trip ${tripId} — ${escapeMd(tripLabel)} (${dateRange})`,
     "",
-    "| Source | Park | Site | Link |",
+    "| Rank | Tier | Listing | Link |",
     "|---|---|---|---|",
   ];
-  for (const o of openings) {
+  for (const o of items) {
     lines.push(
-      `| ${o.source} | ${escapeMd(o.parkName)} | ${escapeMd(o.siteName)} | [Book now](${o.url}) |`,
+      `| #${o.rank} | ${o.tier} | ${escapeMd(o.listingName)} | [Reserve](${o.url}) |`,
     );
   }
-  lines.push("", "_Book fast — MDW spots vanish in minutes._");
   return lines.join("\n");
+}
+
+function renderBody(openings: Opening[]): string {
+  const byTrip = new Map<"A" | "B", Opening[]>();
+  for (const o of openings) {
+    if (!byTrip.has(o.tripId)) byTrip.set(o.tripId, []);
+    byTrip.get(o.tripId)!.push(o);
+  }
+  const sections: string[] = [
+    `**${openings.length} new opening${openings.length === 1 ? "" : "s"}** — book fast, these vanish.`,
+    "",
+  ];
+  for (const [tripId, items] of byTrip) {
+    sections.push(tripHeader(tripId, items[0].tripLabel, items));
+    sections.push("");
+  }
+  sections.push("_camp-watch · ranking is from the MDW two-trips brief._");
+  return sections.join("\n");
+}
+
+function renderTitle(openings: Opening[]): string {
+  // Lead with the best-ranked opening so the email subject is informative.
+  const top = openings.reduce((best, o) => {
+    if (!best) return o;
+    if (o.tripId < best.tripId) return o;
+    if (o.tripId === best.tripId && o.rank < best.rank) return o;
+    return best;
+  }, null as Opening | null)!;
+  const others = openings.length - 1;
+  const suffix = others > 0 ? ` (+${others} more)` : "";
+  return `[camp-watch] #${top.rank} ${top.listingName} open for Trip ${top.tripId}${suffix}`;
 }
 
 export async function notify(openings: Opening[]): Promise<void> {
   if (openings.length === 0) return;
 
-  const title = `[camp-watch] ${openings.length} MDW campsite${openings.length === 1 ? "" : "s"} just opened — ${new Date().toISOString().slice(0, 16).replace("T", " ")} UTC`;
+  const title = renderTitle(openings);
   const body = renderBody(openings);
 
   if (DRY_RUN) {
@@ -41,7 +67,7 @@ export async function notify(openings: Opening[]): Promise<void> {
   }
 
   const token = process.env.GITHUB_TOKEN;
-  const repo = process.env.GITHUB_REPOSITORY; // "owner/name"
+  const repo = process.env.GITHUB_REPOSITORY;
   if (!token || !repo) {
     console.error("GITHUB_TOKEN / GITHUB_REPOSITORY not set — printing instead:");
     console.error(title);

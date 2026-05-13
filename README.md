@@ -1,55 +1,62 @@
 # camp-watch
 
-Polls ReserveCalifornia and Recreation.gov every ~5 min for tent campsite openings within ~2.5h of San Francisco for **Memorial Day Weekend 2026 (Fri May 22 → Sun May 24)**, and opens a GitHub issue (which emails you, via your existing repo-watch notifications) when a site opens.
+Polls 11 specific Hipcamp listings every ~5 min for availability across two camping weekends in 2026, and opens a GitHub issue (which emails you, via your existing repo-watch notifications) when one of them opens up.
+
+Listings, trips, ranks, and tiers all come from the **`mdw_2026_two_trips_v6`** brief — see `src/listings.ts`.
+
+## Trips watched
+
+- **Trip A — MDW** · Fri May 22 → Mon May 25, 2026 (3 nights) · 8 listings
+- **Trip B — Weekend after MDW** · Fri May 29 → Mon Jun 1, 2026 (3 nights) · 3 listings
+
+The 3 sites flagged "Skip" in the brief (Larkspurs Hollow, Redwood Paradise, Sacred Earth Retreat) are intentionally not monitored.
 
 ## How notifications work
 
-When an opening is detected, the workflow opens an issue in this repo with title `[camp-watch] N MDW campsite(s) just opened` and a table of bookable sites with direct links. GitHub emails you automatically because you own the repo and are watching it by default.
+When one or more listings are available, the workflow opens an issue in this repo. Subject leads with the highest-ranked listing (e.g. `[camp-watch] #1 Timber Cove open for Trip A`), body lists every fresh opening grouped by trip. GitHub emails you automatically because you own the repo.
 
-Want a phone push too? Install the GitHub mobile app and enable push notifications for issues.
+For push too: install the GitHub mobile app and enable issue push notifications.
 
-## Sources
+## How it works
 
-- **Recreation.gov** — public `/api/camps/availability/campground/{id}/month` endpoint. Verified working.
-- **ReserveCalifornia** — UseDirect `search/grid` POST endpoint. Park IDs auto-resolved by name on first run via `search/place`.
-- **Hipcamp** — headless Chromium via Playwright (their site is client-rendered, no public API). Scrapes the search-result DOM. Slower (~10s/run) and more fragile than the API sources, but works.
+1. **Slug resolution** (`src/resolveSlugs.ts`) — on first run, Playwright searches Hipcamp for each listing by name + location hint, extracts the `/en-US/land/{slug}`, and caches to `slugs.json`. Committed back to the repo so subsequent runs skip resolution.
+2. **Availability check** (`src/sources/hipcamp.ts`) — for each listing × its trip, Playwright loads `hipcamp.com/en-US/land/{slug}?arrive=…&depart=…` and inspects the booking widget. If a Reserve / Book / Request CTA is present and enabled (and no "unavailable" message is shown), the listing is considered open for those dates.
+3. **Dedupe** (`src/state.ts`) — `state.json` tracks alerted (slug, trip, dates) tuples; the same opening doesn't re-alert.
+4. **Notify** (`src/notify.ts`) — only when at least one fresh opening exists.
+
+## Local development
+
+Requires Node 20+ and Playwright Chromium.
+
+```bash
+npm install
+npx playwright install chromium
+npm run check:dry      # runs without opening an issue
+npx tsx src/resolveSlugs.ts   # only the slug resolver
+```
 
 ## Files
 
 ```
 src/
-  index.ts                   # main entry, runs sources in parallel
-  config.ts                  # trip dates: Fri May 22 → Sun May 24, tent, up to 6 people
-  parks.ts                   # ~19 RC parks + 7 Rec.gov campgrounds within 2.5h of SF
-  types.ts
-  state.ts                   # dedupe via state.json
-  notify.ts                  # opens GitHub issue
+  index.ts             # main entry
+  config.ts            # DRY_RUN, user agent
+  trips.ts             # Trip A + Trip B date configs
+  listings.ts          # 11 Hipcamp listings (rank, tier, search query)
+  resolveSlugs.ts      # one-time slug resolver via Playwright
   sources/
-    reservecalifornia.ts     # UseDirect grid + place-search fallback
-    recreationgov.ts         # Rec.gov availability/month
-.github/workflows/check.yml  # cron: */5 min
-state.json                   # which openings we've already alerted on
+    hipcamp.ts         # per-listing availability check
+  state.ts             # dedupe via state.json
+  notify.ts            # rank-aware GitHub issue
+  types.ts
+.github/workflows/check.yml
+slugs.json             # cached after first run
+state.json             # which openings we've already alerted on
 ```
-
-## Local development
-
-Requires Node 20+.
-
-```bash
-npm install
-npm run check:dry          # runs without opening an issue, just logs
-```
-
-## Tuning the park list
-
-Edit `src/parks.ts`. ReserveCalifornia parks are listed by name only — IDs are resolved at runtime, so adding `{ source: "reservecalifornia", name: "Some SP", driveMinutesFromSF: 60 }` is enough. If the name doesn't resolve, the run logs `Could not resolve UseDirect IDs for "Some SP"`.
-
-## Customizing dates / trip details
-
-Edit `src/config.ts`. After changing dates, delete `state.json` to clear previous alerts.
 
 ## Caveats
 
-- **GitHub Actions cron is best-effort.** Free-tier runs can be delayed 5–15 min during peak load. MDW spots can vanish faster than that.
-- **State commits noise the repo.** Every run that produces a new alert commits an updated `state.json`. Acceptable for low-frequency state; swap to a Gist or KV store if it bothers you.
-- **MDW is close.** Most "openings" will be cancellations that vanish in minutes — click the booking link the second you see the email.
+- **GitHub Actions cron is best-effort.** Free-tier runs can be delayed 5–15 min during peak load.
+- **Hipcamp availability inference is heuristic.** We look for an enabled Reserve CTA + absence of "unavailable" copy. If Hipcamp changes their UI we may need to update selectors. Prefer false positives (alert sent, but listing isn't actually bookable) over false negatives.
+- **Slug resolution is the brittle bit.** If Hipcamp's search returns a wrong slug for a listing name, you'll get alerts about the wrong place. Edit `slugs.json` by hand to override; the resolver only ever adds, never replaces existing entries.
+- **MDW spots vanish in minutes.** Click the link in the email the instant it arrives.

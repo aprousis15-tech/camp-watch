@@ -1,12 +1,17 @@
+import type { Tier } from "./listings.ts";
+
 export type Opening = {
-  source: "reservecalifornia" | "recreationgov" | "hipcamp";
-  parkName: string;
-  siteName: string;
-  // ISO check-in / check-out
+  // Identifier (e.g. trip + listing name).
+  tripId: "A" | "B";
+  tripLabel: string;
+  rank: number;
+  tier: Tier;
+  listingName: string;
   checkIn: string;
   checkOut: string;
-  // Direct booking URL
+  nights: number;
+  // Direct booking URL with arrive/depart preselected.
   url: string;
-  // Stable key for dedupe — same site+dates should produce same key.
+  // Stable key for dedupe.
   dedupeKey: string;
 };
