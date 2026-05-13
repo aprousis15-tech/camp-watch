@@ -1,0 +1,48 @@
+name: camp-watch
+
+on:
+  schedule:
+    # Every 5 minutes. GitHub may queue/delay free-tier cron under load —
+    # in practice expect runs every 5–15 minutes.
+    - cron: "*/5 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: camp-watch
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Run camp-watch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: npm run check
+
+      - name: Commit state changes
+        run: |
+          if [[ -n "$(git status --porcelain state.json)" ]]; then
+            git config user.name "camp-watch[bot]"
+            git config user.email "camp-watch@users.noreply.github.com"
+            git add state.json
+            git commit -m "state: update notified set"
+            git push
+          else
+            echo "No state changes."
+          fi
