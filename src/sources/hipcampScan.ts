@@ -3,24 +3,39 @@ import { USER_AGENT } from "../config.ts";
 import { ADULTS, TRIPS, type Trip } from "../trips.ts";
 import type { Opening, Candidate } from "../types.ts";
 
-// Bounding box covering ~2.5h drive of SF (Sonoma → Big Sur → Sierra foothills).
-const BBOX: [number, number, number, number] = [-123.8, 36.2, -120.5, 39.3];
-
 // Quality bar (matches the profile of the artifact's top picks).
 const MIN_RATING_PCT = 95; // Hipcamp expresses ratings as % recommended OR stars
 const MIN_RATING_STARS = 4.75; // alt threshold if rating exposed as stars
 const MIN_REVIEWS = 50;
 
+// Hipcamp's bbox param doesn't reliably filter results on the static search
+// page — direct page loads tend to return featured/SEO listings from across
+// the US. We hit the California state-level discover page instead, then
+// apply a hard slug-prefix filter as the final guardrail.
 function searchUrl(trip: Trip): string {
-  const [w, s, e, n] = BBOX;
   const p = new URLSearchParams({
-    bbox: `${w},${s},${e},${n}`,
     adults: String(ADULTS),
     arrive: trip.checkIn,
     depart: trip.checkOut,
     accommodation_types: "tent",
   });
-  return `https://www.hipcamp.com/en-US/search?${p.toString()}`;
+  return `https://www.hipcamp.com/en-US/california?${p.toString()}`;
+}
+
+// Heuristic: Hipcamp listing slugs are "<state>-<name-slug>-<6-12-char-id>".
+// "california-timber-cove-mxvhkp6n" -> "Timber Cove".
+function nameFromSlug(slug: string): string {
+  return slug
+    .replace(/^[a-z]+-/, "")
+    .replace(/-[a-z0-9]{6,16}$/, "")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+// California-only — drops Indiana/Wisconsin/Michigan/Maryland/Virginia/etc.
+// featured listings that Hipcamp injects on the discover page.
+function isCalifornia(slug: string): boolean {
+  return slug.startsWith("california-");
 }
 
 type RawCard = {
@@ -64,7 +79,7 @@ async function scrapeCards(browser: Browser, trip: Trip): Promise<RawCard[]> {
         if (!slug || seen.has(slug)) continue;
         seen.add(slug);
 
-        // Walk up until we find a card-like container with the listing's metadata.
+        // Walk up until we find a card-like container.
         let card: HTMLElement = a;
         for (let i = 0; i < 5 && card.parentElement; i++) {
           card = card.parentElement as HTMLElement;
@@ -73,38 +88,44 @@ async function scrapeCards(browser: Browser, trip: Trip): Promise<RawCard[]> {
         }
         const text = (card.innerText || "").replace(/\s+/g, " ").trim();
 
-        const titleEl = card.querySelector("h2, h3, h4, [class*='title' i], [class*='name' i]");
-        const title = (titleEl?.textContent || a.textContent || slug).trim().split("\n")[0];
-
-        // Rating: looks like "★ 4.95" or "98%" — capture either form.
         const starMatch = text.match(/(?:★|☆|⭐)\s*([0-9]\.[0-9]{1,2})/);
         const pctMatch = text.match(/\b(\d{2,3})\s*%\s*(?:recommended|of guests|positive)?/i);
         const ratingText = starMatch?.[0] ?? pctMatch?.[0] ?? null;
 
-        // Reviews: "(291)" or "291 reviews".
         const revMatch = text.match(/\((\d{1,4})\)|\b(\d{2,4})\s+reviews?\b/i);
         const reviewsText = revMatch?.[0] ?? null;
 
-        // Price: "$85/night" / "From $85" / "$85 night"
         const priceMatch = text.match(/\$\s?\d{1,4}[\s\w]*?\/?\s?(?:night|nt)?/i);
         const priceText = priceMatch?.[0] ?? null;
 
-        // Star Host: scan for the text or icon — Hipcamp has a "Star Host" badge.
         const starHost = /\bstar host\b/i.test(text);
 
-        // Location: usually the second line of the card text, after the title.
-        const lines = (card.innerText || "").split("\n").map((l) => l.trim()).filter(Boolean);
-        const titleIdx = lines.findIndex((l) => l.startsWith(title));
-        const locationText = titleIdx >= 0 && lines[titleIdx + 1] ? lines[titleIdx + 1] : null;
-
+        // Title intentionally blank — caller derives from slug (more reliable
+        // than walking Hipcamp's deeply-nested card DOM, which produced
+        // mangled "99%(738)Tranquil Acres3 sites..." strings before).
         const img = card.querySelector("img");
         const imageUrl = img?.getAttribute("src") || img?.getAttribute("data-src") || null;
 
-        out.push({ slug, title, locationText, priceText, ratingText, reviewsText, starHost, imageUrl });
+        out.push({
+          slug,
+          title: "",
+          locationText: null,
+          priceText,
+          ratingText,
+          reviewsText,
+          starHost,
+          imageUrl,
+        });
       }
       return out;
     });
-    return cards;
+
+    // Hard filter: California-only slugs. Hipcamp's discover page injects
+    // featured listings from other states (Indiana, Wisconsin, Virginia, etc.)
+    // — slug prefix is the only reliable geography signal we have.
+    return cards
+      .filter((c) => isCalifornia(c.slug))
+      .map((c) => ({ ...c, title: nameFromSlug(c.slug) }));
   } finally {
     await ctx.close().catch(() => {});
   }
