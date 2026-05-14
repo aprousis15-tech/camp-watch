@@ -31,6 +31,7 @@
   h2 { font-family: ui-serif, Georgia, serif; font-weight: 500; font-size: 28px; letter-spacing: -0.01em; margin-bottom: 6px; }
   .trip-a h2 { color: var(--trip-a); }
   .trip-b h2 { color: var(--trip-b); }
+  .timeline h2 { color: var(--rust); }
   h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-mute); margin: 22px 0 10px; }
   .meta { color: var(--ink-soft); font-size: 13px; margin-bottom: 10px; }
   table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--rule); margin-bottom: 12px; }
@@ -39,6 +40,8 @@
   td.num { text-align: right; font-variant-numeric: tabular-nums; }
   td.title a { color: var(--ink); text-decoration: none; font-weight: 600; }
   td.title a:hover { color: var(--rust); text-decoration: underline; }
+  td.ts strong { display: block; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  td.ts .dim { font-size: 11.5px; }
   tr.pass { background: var(--pass-bg); }
   tr.pass td.title a { color: var(--moss); }
   .badge { display: inline-block; padding: 2px 8px; background: var(--gold); color: white; border-radius: 2px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
@@ -58,14 +61,82 @@
   <div class="page">
     <header>
       <h1>camp-watch</h1>
-      <p>Hipcamp openings within ~2.5h of SF for Memorial Day weekend and the weekend after. Scanning every 5 min; rows highlighted in green pass the quality bar (≥95% rating, ≥50 reviews).</p>
-      <p class="stamp">Last update: 2026-05-14 21:27 UTC · 8 qualifying / 34 bookable across both trips</p>
+      <p>Hipcamp openings within ~2.5h of SF for Memorial Day weekend (Fri May 22 → Sun May 24) and the weekend after (Fri May 29 → Sun May 31). Scanning every 5 min; rows highlighted in green pass the quality bar (≥95% rating, ≥50 reviews).</p>
+      <p class="stamp">Last update: 2026-05-14 22:19 UTC · 7 qualifying / 34 bookable now · 7 total seen since first run</p>
     </header>
+
+    
+    <section class="timeline">
+      <h2>Recently added</h2>
+      <p class="meta">When each verified-bookable listing first showed up. Newest first. Capped at 50 entries; pruned after 14 days.</p>
+      <table>
+        <thead>
+          <tr><th>First seen (UTC)</th><th>Trip</th><th>Listing</th></tr>
+        </thead>
+        <tbody><tr>
+        <td class="ts">
+          <strong>2026-05-14 22:19 UTC</strong>
+          <span class="dim">just now</span>
+        </td>
+        <td>Trip A</td>
+        <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kosk-creek-campgrounds-nelhl9k9" target="_blank" rel="noopener">Kosk Creek Campgrounds</a></td>
+      </tr>
+<tr>
+        <td class="ts">
+          <strong>2026-05-14 22:19 UTC</strong>
+          <span class="dim">just now</span>
+        </td>
+        <td>Trip B</td>
+        <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-finley-camp-06yhx8qe" target="_blank" rel="noopener">Finley Camp</a></td>
+      </tr>
+<tr>
+        <td class="ts">
+          <strong>2026-05-14 22:19 UTC</strong>
+          <span class="dim">just now</span>
+        </td>
+        <td>Trip B</td>
+        <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-splitrock-farm-and-retreat-5x5hl905" target="_blank" rel="noopener">Splitrock Farm And Retreat</a></td>
+      </tr>
+<tr>
+        <td class="ts">
+          <strong>2026-05-14 22:19 UTC</strong>
+          <span class="dim">just now</span>
+        </td>
+        <td>Trip B</td>
+        <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-yosemite-colfax-spring-ex9ho9ye" target="_blank" rel="noopener">Yosemite Colfax Spring</a></td>
+      </tr>
+<tr>
+        <td class="ts">
+          <strong>2026-05-14 22:19 UTC</strong>
+          <span class="dim">just now</span>
+        </td>
+        <td>Trip B</td>
+        <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-mystic-forest-campground-88lhqen5" target="_blank" rel="noopener">Mystic Forest Campground</a></td>
+      </tr>
+<tr>
+        <td class="ts">
+          <strong>2026-05-14 22:19 UTC</strong>
+          <span class="dim">just now</span>
+        </td>
+        <td>Trip B</td>
+        <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-cosumnes-river-somerset-camp-v1qhe0yw" target="_blank" rel="noopener">Cosumnes River Somerset Camp</a></td>
+      </tr>
+<tr>
+        <td class="ts">
+          <strong>2026-05-14 22:19 UTC</strong>
+          <span class="dim">just now</span>
+        </td>
+        <td>Trip B</td>
+        <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kosk-creek-campgrounds-nelhl9k9" target="_blank" rel="noopener">Kosk Creek Campgrounds</a></td>
+      </tr></tbody>
+      </table>
+    </section>
+  
 
     
     <section class="trip trip-a">
       <h2>Trip A — MDW</h2>
-      <p class="meta">2026-05-22 → 2026-05-25 · 3 nights · 2 qualifying · 17 total bookable</p>
+      <p class="meta">2026-05-22 → 2026-05-24 · 2 nights · 1 qualifying · 17 total bookable</p>
 
       <h3>Passes the bar (≥95% / 50+ reviews)</h3>
       <table>
@@ -73,16 +144,7 @@
           <tr><th>Listing</th><th>Location</th><th>Rating</th><th>Reviews</th><th>Host</th><th>Price</th><th>Score</th></tr>
         </thead>
         <tbody><tr class="row pass">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-cosumnes-river-somerset-camp-v1qhe0yw?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Cosumnes River Somerset Camp</a></td>
-    <td></td>
-    <td class="num">95%</td>
-    <td class="num">598</td>
-    <td></td>
-    <td>$34 </td>
-    <td class="num score">264.5</td>
-  </tr>
-<tr class="row pass">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kosk-creek-campgrounds-nelhl9k9?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Kosk Creek Campgrounds</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kosk-creek-campgrounds-nelhl9k9?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Kosk Creek Campgrounds</a></td>
     <td></td>
     <td class="num">96%</td>
     <td class="num">511</td>
@@ -93,13 +155,13 @@
       </table>
 
       <details>
-        <summary>15 other bookable listings (didn't meet quality bar)</summary>
+        <summary>16 other bookable listings (didn't meet quality bar)</summary>
         <table>
           <thead>
             <tr><th>Listing</th><th>Location</th><th>Rating</th><th>Reviews</th><th>Host</th><th>Price</th><th>Score</th></tr>
           </thead>
           <tbody><tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-cosumnes-river-ranch-ex9hpl9e?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Cosumnes River Ranch</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-cosumnes-river-ranch-ex9hpl9e?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Cosumnes River Ranch</a></td>
     <td></td>
     <td class="num">99%</td>
     <td class="num">1927</td>
@@ -108,7 +170,7 @@
     <td class="num score">325.4</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-finley-camp-06yhx8qe?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Finley Camp</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-finley-camp-06yhx8qe?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Finley Camp</a></td>
     <td></td>
     <td class="num">99%</td>
     <td class="num">1875</td>
@@ -117,7 +179,7 @@
     <td class="num score">324.3</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-finnon-lake-recreation-area-06yho1ev?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Finnon Lake Recreation Area</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-finnon-lake-recreation-area-06yho1ev?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Finnon Lake Recreation Area</a></td>
     <td></td>
     <td class="num">95%</td>
     <td class="num">2368</td>
@@ -126,7 +188,7 @@
     <td class="num score">320.7</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-splitrock-farm-and-retreat-5x5hl905?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Splitrock Farm And Retreat</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-splitrock-farm-and-retreat-5x5hl905?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Splitrock Farm And Retreat</a></td>
     <td></td>
     <td class="num">96%</td>
     <td class="num">1747</td>
@@ -135,7 +197,7 @@
     <td class="num score">311.5</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-yosemite-colfax-spring-ex9ho9ye?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Yosemite Colfax Spring</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-yosemite-colfax-spring-ex9ho9ye?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Yosemite Colfax Spring</a></td>
     <td></td>
     <td class="num">98%</td>
     <td class="num">1017</td>
@@ -144,7 +206,7 @@
     <td class="num score">295.1</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-mystic-forest-campground-88lhqen5?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Mystic Forest Campground</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-mystic-forest-campground-88lhqen5?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Mystic Forest Campground</a></td>
     <td></td>
     <td class="num">98%</td>
     <td class="num">977</td>
@@ -153,7 +215,7 @@
     <td class="num score">293.4</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-magical-harrison-serenity-ranch-pw1hjp7z?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Magical Harrison Serenity Ranch</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-magical-harrison-serenity-ranch-pw1hjp7z?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Magical Harrison Serenity Ranch</a></td>
     <td></td>
     <td class="num">93%</td>
     <td class="num">1328</td>
@@ -162,7 +224,7 @@
     <td class="num score">290.8</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-pioneertown-corrals-camping-ozxhknrl?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Pioneertown Corrals Camping</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-pioneertown-corrals-camping-ozxhknrl?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Pioneertown Corrals Camping</a></td>
     <td></td>
     <td class="num">94%</td>
     <td class="num">1134</td>
@@ -171,7 +233,7 @@
     <td class="num score">287.5</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kings-canyon-campground-mxvhrzok?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Kings Canyon Campground</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kings-canyon-campground-mxvhrzok?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Kings Canyon Campground</a></td>
     <td></td>
     <td class="num">92%</td>
     <td class="num">745</td>
@@ -180,7 +242,16 @@
     <td class="num score">264.8</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-malibu-rv-park-7rvh2p6w?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Malibu Rv Park</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-cosumnes-river-somerset-camp-v1qhe0yw?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Cosumnes River Somerset Camp</a></td>
+    <td></td>
+    <td class="num">95%</td>
+    <td class="num">598</td>
+    <td></td>
+    <td>$34 </td>
+    <td class="num score">264.5</td>
+  </tr>
+<tr class="row">
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-malibu-rv-park-7rvh2p6w?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Malibu Rv Park</a></td>
     <td></td>
     <td class="num">93%</td>
     <td class="num">611</td>
@@ -189,7 +260,7 @@
     <td class="num score">259.8</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-saddle-mountain-carmel-mxvhn1jv?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Saddle Mountain Carmel</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-saddle-mountain-carmel-mxvhn1jv?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Saddle Mountain Carmel</a></td>
     <td></td>
     <td class="num">92%</td>
     <td class="num">601</td>
@@ -198,7 +269,7 @@
     <td class="num score">256.3</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-harvest-moon-homestead-zwjheojr?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Harvest Moon Homestead</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-harvest-moon-homestead-zwjheojr?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Harvest Moon Homestead</a></td>
     <td></td>
     <td class="num">100%</td>
     <td class="num">1</td>
@@ -207,7 +278,7 @@
     <td class="num score">104.1</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-outdoorsy-yosemite-campground-mxvhye00?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Outdoorsy Yosemite Campground</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-outdoorsy-yosemite-campground-mxvhye00?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Outdoorsy Yosemite Campground</a></td>
     <td></td>
     <td class="num"><span class='dim'>—</span></td>
     <td class="num"><span class='dim'>—</span></td>
@@ -216,7 +287,7 @@
     <td class="num score">0.0</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-timber-cove-campground-v1qh2pjm?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">Timber Cove Campground</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-timber-cove-campground-v1qh2pjm?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">Timber Cove Campground</a></td>
     <td></td>
     <td class="num"><span class='dim'>—</span></td>
     <td class="num"><span class='dim'>—</span></td>
@@ -225,7 +296,7 @@
     <td class="num score">0.0</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-the-ranch-at-cross-road-dw9hwkk7?arrive=2026-05-22&amp;depart=2026-05-25&amp;adults=4" target="_blank" rel="noopener">The Ranch At Cross Road</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-the-ranch-at-cross-road-dw9hwkk7?arrive=2026-05-22&amp;depart=2026-05-24&amp;adults=4" target="_blank" rel="noopener">The Ranch At Cross Road</a></td>
     <td></td>
     <td class="num"><span class='dim'>—</span></td>
     <td class="num"><span class='dim'>—</span></td>
@@ -240,7 +311,7 @@
 
     <section class="trip trip-b">
       <h2>Trip B — Weekend after MDW</h2>
-      <p class="meta">2026-05-29 → 2026-06-01 · 3 nights · 6 qualifying · 17 total bookable</p>
+      <p class="meta">2026-05-29 → 2026-05-31 · 2 nights · 6 qualifying · 17 total bookable</p>
 
       <h3>Passes the bar (≥95% / 50+ reviews)</h3>
       <table>
@@ -248,7 +319,7 @@
           <tr><th>Listing</th><th>Location</th><th>Rating</th><th>Reviews</th><th>Host</th><th>Price</th><th>Score</th></tr>
         </thead>
         <tbody><tr class="row pass">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-finley-camp-06yhx8qe?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Finley Camp</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-finley-camp-06yhx8qe?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Finley Camp</a></td>
     <td></td>
     <td class="num">99%</td>
     <td class="num">1875</td>
@@ -257,7 +328,7 @@
     <td class="num score">324.3</td>
   </tr>
 <tr class="row pass">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-splitrock-farm-and-retreat-5x5hl905?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Splitrock Farm And Retreat</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-splitrock-farm-and-retreat-5x5hl905?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Splitrock Farm And Retreat</a></td>
     <td></td>
     <td class="num">96%</td>
     <td class="num">1747</td>
@@ -266,7 +337,7 @@
     <td class="num score">311.5</td>
   </tr>
 <tr class="row pass">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-yosemite-colfax-spring-ex9ho9ye?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Yosemite Colfax Spring</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-yosemite-colfax-spring-ex9ho9ye?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Yosemite Colfax Spring</a></td>
     <td></td>
     <td class="num">98%</td>
     <td class="num">1017</td>
@@ -275,7 +346,7 @@
     <td class="num score">295.1</td>
   </tr>
 <tr class="row pass">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-mystic-forest-campground-88lhqen5?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Mystic Forest Campground</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-mystic-forest-campground-88lhqen5?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Mystic Forest Campground</a></td>
     <td></td>
     <td class="num">98%</td>
     <td class="num">977</td>
@@ -284,7 +355,7 @@
     <td class="num score">293.4</td>
   </tr>
 <tr class="row pass">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-cosumnes-river-somerset-camp-v1qhe0yw?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Cosumnes River Somerset Camp</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-cosumnes-river-somerset-camp-v1qhe0yw?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Cosumnes River Somerset Camp</a></td>
     <td></td>
     <td class="num">95%</td>
     <td class="num">598</td>
@@ -293,7 +364,7 @@
     <td class="num score">264.5</td>
   </tr>
 <tr class="row pass">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kosk-creek-campgrounds-nelhl9k9?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Kosk Creek Campgrounds</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kosk-creek-campgrounds-nelhl9k9?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Kosk Creek Campgrounds</a></td>
     <td></td>
     <td class="num">96%</td>
     <td class="num">511</td>
@@ -310,7 +381,7 @@
             <tr><th>Listing</th><th>Location</th><th>Rating</th><th>Reviews</th><th>Host</th><th>Price</th><th>Score</th></tr>
           </thead>
           <tbody><tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-cosumnes-river-ranch-ex9hpl9e?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Cosumnes River Ranch</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-cosumnes-river-ranch-ex9hpl9e?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Cosumnes River Ranch</a></td>
     <td></td>
     <td class="num">99%</td>
     <td class="num">1927</td>
@@ -319,7 +390,7 @@
     <td class="num score">325.4</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-finnon-lake-recreation-area-06yho1ev?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Finnon Lake Recreation Area</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-finnon-lake-recreation-area-06yho1ev?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Finnon Lake Recreation Area</a></td>
     <td></td>
     <td class="num">95%</td>
     <td class="num">2368</td>
@@ -328,7 +399,7 @@
     <td class="num score">320.7</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-magical-harrison-serenity-ranch-pw1hjp7z?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Magical Harrison Serenity Ranch</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-magical-harrison-serenity-ranch-pw1hjp7z?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Magical Harrison Serenity Ranch</a></td>
     <td></td>
     <td class="num">93%</td>
     <td class="num">1328</td>
@@ -337,7 +408,7 @@
     <td class="num score">290.8</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-pioneertown-corrals-camping-ozxhknrl?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Pioneertown Corrals Camping</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-pioneertown-corrals-camping-ozxhknrl?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Pioneertown Corrals Camping</a></td>
     <td></td>
     <td class="num">94%</td>
     <td class="num">1134</td>
@@ -346,7 +417,7 @@
     <td class="num score">287.5</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kings-canyon-campground-mxvhrzok?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Kings Canyon Campground</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-kings-canyon-campground-mxvhrzok?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Kings Canyon Campground</a></td>
     <td></td>
     <td class="num">92%</td>
     <td class="num">745</td>
@@ -355,7 +426,7 @@
     <td class="num score">264.8</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-malibu-rv-park-7rvh2p6w?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Malibu Rv Park</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-malibu-rv-park-7rvh2p6w?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Malibu Rv Park</a></td>
     <td></td>
     <td class="num">93%</td>
     <td class="num">611</td>
@@ -364,7 +435,7 @@
     <td class="num score">259.8</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-saddle-mountain-carmel-mxvhn1jv?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Saddle Mountain Carmel</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-saddle-mountain-carmel-mxvhn1jv?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Saddle Mountain Carmel</a></td>
     <td></td>
     <td class="num">92%</td>
     <td class="num">601</td>
@@ -373,7 +444,7 @@
     <td class="num score">256.3</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-harvest-moon-homestead-zwjheojr?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Harvest Moon Homestead</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-harvest-moon-homestead-zwjheojr?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Harvest Moon Homestead</a></td>
     <td></td>
     <td class="num">100%</td>
     <td class="num">1</td>
@@ -382,7 +453,7 @@
     <td class="num score">104.1</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-outdoorsy-yosemite-campground-mxvhye00?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Outdoorsy Yosemite Campground</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-outdoorsy-yosemite-campground-mxvhye00?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Outdoorsy Yosemite Campground</a></td>
     <td></td>
     <td class="num"><span class='dim'>—</span></td>
     <td class="num"><span class='dim'>—</span></td>
@@ -391,7 +462,7 @@
     <td class="num score">0.0</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-timber-cove-campground-v1qh2pjm?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">Timber Cove Campground</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-timber-cove-campground-v1qh2pjm?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">Timber Cove Campground</a></td>
     <td></td>
     <td class="num"><span class='dim'>—</span></td>
     <td class="num"><span class='dim'>—</span></td>
@@ -400,7 +471,7 @@
     <td class="num score">0.0</td>
   </tr>
 <tr class="row">
-    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-the-ranch-at-cross-road-dw9hwkk7?arrive=2026-05-29&amp;depart=2026-06-01&amp;adults=4" target="_blank" rel="noopener">The Ranch At Cross Road</a></td>
+    <td class="title"><a href="https://www.hipcamp.com/en-US/land/california-the-ranch-at-cross-road-dw9hwkk7?arrive=2026-05-29&amp;depart=2026-05-31&amp;adults=4" target="_blank" rel="noopener">The Ranch At Cross Road</a></td>
     <td></td>
     <td class="num"><span class='dim'>—</span></td>
     <td class="num"><span class='dim'>—</span></td>
