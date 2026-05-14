@@ -1,4 +1,4 @@
-import { chromium, type Browser } from "playwright";
+import { chromium, type Browser, type Page } from "playwright";
 import { USER_AGENT } from "../config.ts";
 import { ADULTS, TRIPS, type Trip } from "../trips.ts";
 import type { Opening, Candidate } from "../types.ts";
@@ -160,6 +160,67 @@ function passesQualityBar(rating: ReturnType<typeof parseRating>, reviews: numbe
   return true;
 }
 
+// Per-listing availability check. Discover-page results are NOT date-filtered
+// (Hipcamp returns popular listings regardless of arrive/depart params), so we
+// hit each listing's detail page with the trip dates and read the booking
+// widget. False positives ("alert fires but listing isn't actually bookable")
+// are preferred over false negatives ("miss the opening") — so we keep
+// borderline-ambiguous pages.
+async function isBookableForDates(
+  browser: Browser,
+  slug: string,
+  trip: Trip,
+): Promise<{ available: boolean; reason: string }> {
+  const url = `https://www.hipcamp.com/en-US/land/${slug}?arrive=${trip.checkIn}&depart=${trip.checkOut}&adults=${ADULTS}`;
+  const ctx = await browser.newContext({ userAgent: USER_AGENT });
+  const page: Page = await ctx.newPage();
+  try {
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 25000 });
+    // Wait for the booking widget to hydrate. Multiple possible selectors —
+    // we wait for any of them or for an explicit unavailable message.
+    await page
+      .waitForSelector(
+        'button:has-text("Reserve"), button:has-text("Book"), button:has-text("Request"), text=/not available/i, text=/sold out/i, text=/dates unavailable/i',
+        { timeout: 12000 },
+      )
+      .catch(() => null);
+    await page.waitForTimeout(1500);
+
+    const signals = await page.evaluate(() => {
+      const text = document.body.innerText.toLowerCase();
+      const cta = Array.from(document.querySelectorAll("button, a")).find((el) => {
+        const t = (el.textContent || "").trim().toLowerCase();
+        return /^(reserve|book( now)?|request to book|instant book)$/i.test(t);
+      }) as HTMLButtonElement | null;
+      const unavailable =
+        text.includes("not available for these dates") ||
+        text.includes("dates aren't available") ||
+        text.includes("dates unavailable") ||
+        text.includes("no availability for") ||
+        text.includes("sold out");
+      return {
+        unavailable,
+        ctaText: cta?.textContent?.trim() ?? null,
+        ctaDisabled: cta ? cta.hasAttribute("disabled") || cta.getAttribute("aria-disabled") === "true" : null,
+      };
+    });
+
+    if (signals.unavailable && !signals.ctaText) {
+      return { available: false, reason: "page shows unavailable, no reserve CTA" };
+    }
+    if (signals.ctaText && signals.ctaDisabled === true) {
+      return { available: false, reason: "reserve CTA disabled" };
+    }
+    if (signals.ctaText) {
+      return { available: true, reason: `CTA: ${signals.ctaText}` };
+    }
+    // No clear signal — keep it as "available" (false-positive bias).
+    return { available: true, reason: "no clear signal, keeping" };
+  } finally {
+    await ctx.close().catch(() => {});
+  }
+}
+
 // Higher = better. Used to sort the dashboard.
 function score(
   rating: ReturnType<typeof parseRating>,
@@ -207,9 +268,29 @@ export async function scanAllTrips(): Promise<ScanResult[]> {
         };
       });
 
-      // Sort by score desc — qualifies-first ordering happens in the consumer.
       candidates.sort((a, b) => b.score - a.score);
-      console.log(`  qualifying: ${candidates.filter((c) => c.qualifies).length}`);
+      const preVerify = candidates.filter((c) => c.qualifies);
+      console.log(`  passed quality bar (pre-verify): ${preVerify.length}`);
+
+      // Per-listing availability verification. Discover-page hits don't
+      // actually filter by date — only this step does.
+      let verified = 0;
+      for (const c of preVerify) {
+        try {
+          const r = await isBookableForDates(browser, c.slug, trip);
+          if (!r.available) {
+            c.qualifies = false;
+            console.log(`    · ${c.title}: skip (${r.reason})`);
+          } else {
+            verified++;
+            console.log(`    ✓ ${c.title}: ${r.reason}`);
+          }
+        } catch (e) {
+          // On error, keep it (false-positive bias).
+          console.warn(`    ! ${c.title}: verify failed (${(e as Error).message}); keeping`);
+        }
+      }
+      console.log(`  actually bookable: ${verified}`);
       results.push({ trip, candidates });
     }
   } finally {
