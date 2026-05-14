@@ -175,47 +175,62 @@ async function isBookableForDates(
   const ctx = await browser.newContext({ userAgent: USER_AGENT });
   const page: Page = await ctx.newPage();
   try {
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 25000 });
-    // Wait for the booking widget to hydrate. Multiple possible selectors —
-    // we wait for any of them or for an explicit unavailable message.
-    await page
-      .waitForSelector(
-        'button:has-text("Reserve"), button:has-text("Book"), button:has-text("Request"), text=/not available/i, text=/sold out/i, text=/dates unavailable/i',
-        { timeout: 12000 },
-      )
-      .catch(() => null);
-    await page.waitForTimeout(1500);
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
+    // Wait for the booking widget GraphQL call to settle. Hipcamp fetches
+    // availability via XHR after page hydration; networkidle is a much more
+    // reliable signal than a fixed timeout.
+    await page.waitForLoadState("networkidle", { timeout: 20000 }).catch(() => null);
+    // Even with networkidle, the React state may take another beat to render.
+    await page.waitForTimeout(2000);
 
-    const signals = await page.evaluate(() => {
-      const text = document.body.innerText.toLowerCase();
+    const nightsRe = new RegExp(`\\u00d7\\s*${trip.nights}\\s+nights?`, "i"); // "× 3 nights"
+
+    const signals = await page.evaluate(({ nightsPattern }) => {
+      const text = document.body.innerText;
+      const lower = text.toLowerCase();
+
       const cta = Array.from(document.querySelectorAll("button, a")).find((el) => {
         const t = (el.textContent || "").trim().toLowerCase();
         return /^(reserve|book( now)?|request to book|instant book)$/i.test(t);
       }) as HTMLButtonElement | null;
+
       const unavailable =
-        text.includes("not available for these dates") ||
-        text.includes("dates aren't available") ||
-        text.includes("dates unavailable") ||
-        text.includes("no availability for") ||
-        text.includes("sold out");
+        lower.includes("not available for these dates") ||
+        lower.includes("dates aren't available") ||
+        lower.includes("dates unavailable") ||
+        lower.includes("no availability for") ||
+        lower.includes("select different dates") ||
+        lower.includes("sold out");
+
+      // "× 3 nights" appears in the booking widget total breakdown only when
+      // the requested range is bookable. Strongest positive signal.
+      const re = new RegExp(nightsPattern, "i");
+      const nightsBreakdown = re.test(text);
+
       return {
         unavailable,
+        nightsBreakdown,
         ctaText: cta?.textContent?.trim() ?? null,
         ctaDisabled: cta ? cta.hasAttribute("disabled") || cta.getAttribute("aria-disabled") === "true" : null,
       };
-    });
+    }, { nightsPattern: nightsRe.source });
 
-    if (signals.unavailable && !signals.ctaText) {
-      return { available: false, reason: "page shows unavailable, no reserve CTA" };
+    // Strongest positive: the total-cost breakdown explicitly references the
+    // trip's night count. If we see that, the listing is bookable.
+    if (signals.nightsBreakdown) {
+      return { available: true, reason: `total breakdown shows ${trip.nights} nights` };
     }
-    if (signals.ctaText && signals.ctaDisabled === true) {
+    // Negative signals dominate when there's no "× N nights" total.
+    if (signals.unavailable) {
+      return { available: false, reason: "page shows unavailable copy" };
+    }
+    if (signals.ctaDisabled === true) {
       return { available: false, reason: "reserve CTA disabled" };
     }
-    if (signals.ctaText) {
-      return { available: true, reason: `CTA: ${signals.ctaText}` };
-    }
-    // No clear signal — keep it as "available" (false-positive bias).
-    return { available: true, reason: "no clear signal, keeping" };
+    // No "× N nights" AND no explicit unavailable copy — likely a multi-site
+    // property where users must pick a specific site first. Treat as unknown
+    // and exclude to keep alerts honest.
+    return { available: false, reason: "no nights-breakdown found (likely needs site selection or unavailable)" };
   } finally {
     await ctx.close().catch(() => {});
   }
