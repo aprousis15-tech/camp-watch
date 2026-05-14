@@ -1,3 +1,12 @@
 {
-  "notified": {}
+  "notified": {
+    "hc:california-cosumnes-river-somerset-camp-v1qhe0yw:A:2026-05-22:2026-05-25": "2026-05-14T17:46:10.865Z",
+    "hc:california-kosk-creek-campgrounds-nelhl9k9:A:2026-05-22:2026-05-25": "2026-05-14T17:46:10.865Z",
+    "hc:california-finley-camp-06yhx8qe:B:2026-05-29:2026-06-01": "2026-05-14T17:46:10.865Z",
+    "hc:california-splitrock-farm-and-retreat-5x5hl905:B:2026-05-29:2026-06-01": "2026-05-14T17:46:10.865Z",
+    "hc:california-yosemite-colfax-spring-ex9ho9ye:B:2026-05-29:2026-06-01": "2026-05-14T17:46:10.865Z",
+    "hc:california-mystic-forest-campground-88lhqen5:B:2026-05-29:2026-06-01": "2026-05-14T17:46:10.865Z",
+    "hc:california-cosumnes-river-somerset-camp-v1qhe0yw:B:2026-05-29:2026-06-01": "2026-05-14T17:46:10.865Z",
+    "hc:california-kosk-creek-campgrounds-nelhl9k9:B:2026-05-29:2026-06-01": "2026-05-14T17:46:10.865Z"
+  }
 }
