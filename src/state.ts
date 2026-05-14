@@ -4,8 +4,8 @@ import type { Opening } from "./types.ts";
 
 const STATE_PATH = resolve(process.cwd(), "state.json");
 
-type StateFile = {
-  // dedupeKey -> ISO timestamp of when we first notified for this key
+export type StateFile = {
+  // dedupeKey -> ISO timestamp of when this opening first became available
   notified: Record<string, string>;
 };
 

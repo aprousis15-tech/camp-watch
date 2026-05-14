@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import type { ScanResult } from "../sources/hipcampScan.ts";
 import { ALL_LISTINGS } from "../listings.ts";
 import type { Candidate } from "../types.ts";
+import type { StateFile } from "../state.ts";
 
 const DOCS_DIR = resolve(process.cwd(), "docs");
 
@@ -76,6 +77,77 @@ function renderTripSection(r: ScanResult): string {
   `;
 }
 
+// Parse dedupeKey like "hc:california-finley-camp-06yhx8qe:A:2026-05-22:2026-05-24"
+// into a friendly listing title and trip id.
+function parseDedupeKey(key: string): { title: string; tripId: string; slug: string } | null {
+  const m = key.match(/^hc:(.+?):([AB]):/);
+  if (!m) return null;
+  const slug = m[1];
+  const tripId = m[2];
+  const title = slug
+    .replace(/^[a-z]+-/, "")
+    .replace(/-[a-z0-9]{6,16}$/, "")
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+  return { title, tripId, slug };
+}
+
+function timeAgo(iso: string, nowMs: number): string {
+  const diffMs = nowMs - new Date(iso).getTime();
+  const min = Math.round(diffMs / 60000);
+  if (min < 1) return "just now";
+  if (min < 60) return `${min} min ago`;
+  const hr = Math.round(min / 60);
+  if (hr < 24) return `${hr} hr ago`;
+  const day = Math.round(hr / 24);
+  return `${day} day${day === 1 ? "" : "s"} ago`;
+}
+
+function renderTimeline(state: StateFile, nowMs: number): string {
+  const entries = Object.entries(state.notified)
+    .map(([key, iso]) => ({ key, iso, parsed: parseDedupeKey(key) }))
+    .filter((e) => e.parsed)
+    .sort((a, b) => new Date(b.iso).getTime() - new Date(a.iso).getTime());
+
+  if (entries.length === 0) {
+    return `
+      <section class="timeline">
+        <h2>Recently added</h2>
+        <p class="meta">Each time a listing first appears as bookable, it lands here with the exact timestamp. Nothing yet — cron is still watching.</p>
+      </section>
+    `;
+  }
+
+  const rows = entries
+    .slice(0, 50)
+    .map(({ iso, parsed }) => {
+      const dt = new Date(iso);
+      const tripUrl = `https://www.hipcamp.com/en-US/land/${parsed!.slug}`;
+      return `<tr>
+        <td class="ts">
+          <strong>${dt.toISOString().replace("T", " ").slice(0, 16)} UTC</strong>
+          <span class="dim">${timeAgo(iso, nowMs)}</span>
+        </td>
+        <td>Trip ${parsed!.tripId}</td>
+        <td class="title"><a href="${tripUrl}" target="_blank" rel="noopener">${esc(parsed!.title)}</a></td>
+      </tr>`;
+    })
+    .join("\n");
+
+  return `
+    <section class="timeline">
+      <h2>Recently added</h2>
+      <p class="meta">When each verified-bookable listing first showed up. Newest first. Capped at 50 entries; pruned after 14 days.</p>
+      <table>
+        <thead>
+          <tr><th>First seen (UTC)</th><th>Trip</th><th>Listing</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </section>
+  `;
+}
+
 function renderReferenceGrid(): string {
   const rows = ALL_LISTINGS.map((l) => {
     return `<tr>
@@ -124,6 +196,7 @@ const CSS = `
   h2 { font-family: ui-serif, Georgia, serif; font-weight: 500; font-size: 28px; letter-spacing: -0.01em; margin-bottom: 6px; }
   .trip-a h2 { color: var(--trip-a); }
   .trip-b h2 { color: var(--trip-b); }
+  .timeline h2 { color: var(--rust); }
   h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-mute); margin: 22px 0 10px; }
   .meta { color: var(--ink-soft); font-size: 13px; margin-bottom: 10px; }
   table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--rule); margin-bottom: 12px; }
@@ -132,6 +205,8 @@ const CSS = `
   td.num { text-align: right; font-variant-numeric: tabular-nums; }
   td.title a { color: var(--ink); text-decoration: none; font-weight: 600; }
   td.title a:hover { color: var(--rust); text-decoration: underline; }
+  td.ts strong { display: block; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  td.ts .dim { font-size: 11.5px; }
   tr.pass { background: var(--pass-bg); }
   tr.pass td.title a { color: var(--moss); }
   .badge { display: inline-block; padding: 2px 8px; background: var(--gold); color: white; border-radius: 2px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
@@ -147,10 +222,11 @@ const CSS = `
   .score { color: var(--moss); font-weight: 600; }
 `;
 
-export async function buildSite(results: ScanResult[]): Promise<void> {
+export async function buildSite(results: ScanResult[], state: StateFile): Promise<void> {
   await mkdir(DOCS_DIR, { recursive: true });
 
   const now = new Date();
+  const nowMs = now.getTime();
   const stamp = now.toISOString().replace("T", " ").slice(0, 16) + " UTC";
 
   const totalQualifying = results.reduce(
@@ -158,6 +234,7 @@ export async function buildSite(results: ScanResult[]): Promise<void> {
     0,
   );
   const totalBookable = results.reduce((n, r) => n + r.candidates.length, 0);
+  const totalSeen = Object.keys(state.notified).length;
 
   const html = `<!doctype html>
 <html lang="en">
@@ -172,9 +249,11 @@ export async function buildSite(results: ScanResult[]): Promise<void> {
   <div class="page">
     <header>
       <h1>camp-watch</h1>
-      <p>Hipcamp openings within ~2.5h of SF for Memorial Day weekend and the weekend after. Scanning every 5 min; rows highlighted in green pass the quality bar (≥95% rating, ≥50 reviews).</p>
-      <p class="stamp">Last update: ${stamp} · ${totalQualifying} qualifying / ${totalBookable} bookable across both trips</p>
+      <p>Hipcamp openings within ~2.5h of SF for Memorial Day weekend (Fri May 22 → Sun May 24) and the weekend after (Fri May 29 → Sun May 31). Scanning every 5 min; rows highlighted in green pass the quality bar (≥95% rating, ≥50 reviews).</p>
+      <p class="stamp">Last update: ${stamp} · ${totalQualifying} qualifying / ${totalBookable} bookable now · ${totalSeen} total seen since first run</p>
     </header>
+
+    ${renderTimeline(state, nowMs)}
 
     ${results.map(renderTripSection).join("\n")}
 
