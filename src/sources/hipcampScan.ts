@@ -215,22 +215,27 @@ async function isBookableForDates(
       };
     }, { nightsPattern: nightsRe.source });
 
-    // Strongest positive: the total-cost breakdown explicitly references the
-    // trip's night count. If we see that, the listing is bookable.
+    // Tier 1 (strongest): explicit "× N nights" total breakdown.
     if (signals.nightsBreakdown) {
       return { available: true, reason: `total breakdown shows ${trip.nights} nights` };
     }
-    // Negative signals dominate when there's no "× N nights" total.
+    // Tier 2 (negative): explicit unavailable copy beats CTA presence.
     if (signals.unavailable) {
       return { available: false, reason: "page shows unavailable copy" };
     }
+    // Tier 3 (negative): disabled CTA.
     if (signals.ctaDisabled === true) {
       return { available: false, reason: "reserve CTA disabled" };
     }
-    // No "× N nights" AND no explicit unavailable copy — likely a multi-site
-    // property where users must pick a specific site first. Treat as unknown
-    // and exclude to keep alerts honest.
-    return { available: false, reason: "no nights-breakdown found (likely needs site selection or unavailable)" };
+    // Tier 4 (looser positive, per user choice "a"): an enabled Reserve/Book
+    // CTA without negative signals is treated as bookable. Hipcamp renders
+    // this CTA by default so this matches ~50% false positives — accepted
+    // tradeoff to surface more candidates rather than miss real openings.
+    if (signals.ctaText) {
+      return { available: true, reason: `CTA enabled: ${signals.ctaText} (unverified, click to confirm)` };
+    }
+    // No signals at all — exclude (can't even find a booking widget).
+    return { available: false, reason: "no booking widget detected" };
   } finally {
     await ctx.close().catch(() => {});
   }
