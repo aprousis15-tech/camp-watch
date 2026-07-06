@@ -1,7 +1,5 @@
 {
   "notified": {
-    "hc:california-cuyama-badlands-388lhwwr:A:2026-05-22:2026-05-24": "2026-06-22T07:43:52.226Z",
-    "hc:california-cuyama-badlands-388lhwwr:B:2026-05-29:2026-05-31": "2026-06-22T07:43:52.226Z",
     "hc:california-splitrock-farm-and-retreat-5x5hl905:B:2026-05-29:2026-05-31": "2026-06-26T01:40:36.408Z",
     "hc:california-mystic-forest-campground-88lhqen5:B:2026-05-29:2026-05-31": "2026-06-26T01:40:36.408Z",
     "hc:california-kosk-creek-campgrounds-nelhl9k9:B:2026-05-29:2026-05-31": "2026-06-26T01:40:36.408Z",
@@ -9,6 +7,8 @@
     "hc:california-mystic-forest-campground-88lhqen5:A:2026-05-22:2026-05-24": "2026-06-29T06:36:24.218Z",
     "hc:california-jug-handle-creek-nature-center-3xryhjnk:B:2026-05-29:2026-05-31": "2026-07-01T18:24:40.932Z",
     "hc:california-diamond-gulch-nelhzzp2:B:2026-05-29:2026-05-31": "2026-07-01T18:24:40.932Z",
-    "hc:california-jug-handle-creek-nature-center-3xryhjnk:A:2026-05-22:2026-05-24": "2026-07-03T16:54:03.782Z"
+    "hc:california-jug-handle-creek-nature-center-3xryhjnk:A:2026-05-22:2026-05-24": "2026-07-03T16:54:03.782Z",
+    "hc:california-cuyama-badlands-388lhwwr:A:2026-05-22:2026-05-24": "2026-07-06T09:49:27.233Z",
+    "hc:california-cuyama-badlands-388lhwwr:B:2026-05-29:2026-05-31": "2026-07-06T09:49:27.233Z"
   }
 }
